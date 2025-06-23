@@ -397,6 +397,10 @@
                     <span class="stat-label">Additional Farming Needed:</span>
                     <span class="stat-value" id="additionalFarming">Yes</span>
                 </div>
+                <div class="stat-row">
+                    <span class="stat-label">Card Flips Earned:</span>
+                    <span class="stat-value" id="cardFlips">40</span>
+                </div>
             </div>
 
             <div class="result-card">
@@ -577,11 +581,16 @@
             const totalPointsFromOtherSources = soulstonePoints + tournamentData.points;
             const remainingPoints = Math.max(0, TOTAL_POINTS_NEEDED - totalPointsFromOtherSources);
             
+            // Calculate total points that will actually be earned (not assuming completion)
+            const totalPointsEarned = totalPointsFromOtherSources;
+            const cardFlips = Math.min(40, Math.floor(totalPointsEarned / 1000));
+            
             // Update soulstone summary
             document.getElementById('totalSoulstones').textContent = totalSoulstones.toLocaleString();
             document.getElementById('soulstonePoints').textContent = soulstonePoints.toLocaleString();
             document.getElementById('remainingPoints').textContent = remainingPoints.toLocaleString();
             document.getElementById('additionalFarming').textContent = remainingPoints > 0 ? 'Yes' : 'No';
+            document.getElementById('cardFlips').textContent = cardFlips.toLocaleString();
             
             // Update tournament summary
             document.getElementById('tournamentsCount').textContent = tournamentData.count;
