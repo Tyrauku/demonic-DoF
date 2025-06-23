@@ -58,40 +58,6 @@
             font-size: 1.5em;
         }
 
-        .soulstone-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .soulstone-input {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .soulstone-input label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .mortal { border-left: 4px solid #8B4513; }
-        .immortal { border-left: 4px solid #4169E1; }
-        .eternal { border-left: 4px solid #FFD700; }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            font-size: 16px;
-        }
-
         .tournament-inputs {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -152,6 +118,49 @@
         .energy-input input {
             width: 100%;
             max-width: 150px;
+        }
+
+        .soulstone-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .soulstone-input {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .soulstone-input label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .mortal { border-left: 4px solid #8B4513; }
+        .immortal { border-left: 4px solid #4169E1; }
+        .eternal { border-left: 4px solid #FFD700; }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        input[type="checkbox"], input[type="radio"] {
+            margin-right: 8px;
         }
 
         .results-section {
@@ -366,20 +375,6 @@
             </div>
 
             <div class="result-card">
-                <h3>Tournament Summary</h3>
-                <div class="stat-row">
-                    <span class="stat-label">Tournaments Participating:</span>
-                    <span class="stat-value" id="tournamentsCount">0</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Total Tournament Energy:</span>
-                    <span class="stat-value" id="tournamentEnergy">0</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Points from Tournaments:</span>
-                    <span class="stat-value" id="tournamentPoints">0</span>
-                </div>
-            </div>
                 <h3>Soulstone Summary</h3>
                 <div class="stat-row">
                     <span class="stat-label">Total Soulstones:</span>
@@ -399,7 +394,7 @@
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Card Flips Earned:</span>
-                    <span class="stat-value" id="cardFlips">40</span>
+                    <span class="stat-value" id="cardFlips">0</span>
                 </div>
             </div>
 
@@ -531,8 +526,6 @@
             rank6Mythical: 37
         };
         
-        const GEAR_DROP_CHANCE = 0.995;
-        
         // Energy to gems conversion (Level 60+: 130 energy for 40 gems)
         const ENERGY_PER_GEM_PURCHASE = 130;
         const GEMS_PER_PURCHASE = 40;
@@ -554,7 +547,7 @@
             for (const [key, rate] of Object.entries(dropRates)) {
                 expectedPoints += rate * points[key];
             }
-            // Drop rates already account for 0.5% ancient shard chance, so no need to multiply by 0.995
+            // Drop rates already account for 0.5% ancient shard chance
             return expectedPoints;
         }
         
@@ -581,7 +574,7 @@
             const totalPointsFromOtherSources = soulstonePoints + tournamentData.points;
             const remainingPoints = Math.max(0, TOTAL_POINTS_NEEDED - totalPointsFromOtherSources);
             
-            // Calculate total points that will actually be earned (not assuming completion)
+            // Calculate card flips based on total points earned
             const totalPointsEarned = totalPointsFromOtherSources;
             const cardFlips = Math.min(40, Math.floor(totalPointsEarned / 1000));
             
@@ -628,8 +621,8 @@
             let count = 0;
             
             // Points per energy for each difficulty
-            const stage20PointsPerEnergy = STAGE_20_POINTS_PER_RUN / STAGE_20_ENERGY; // 1.137
-            const stage10PointsPerEnergy = STAGE_10_POINTS_PER_RUN / STAGE_10_ENERGY; // 1.013
+            const stage20PointsPerEnergy = STAGE_20_POINTS_PER_RUN / STAGE_20_ENERGY;
+            const stage10PointsPerEnergy = STAGE_10_POINTS_PER_RUN / STAGE_10_ENERGY;
             
             // Check Dragon tournament
             if (document.getElementById('dragonParticipate').checked) {
